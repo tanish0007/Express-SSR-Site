@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "userId" : 1751988274296,
+        "products" : [
+            {
+                "id" : 1751998025425,
+                "title" : "Item 1",
+                "stock": 3,
+                "price": 99,
+                "description": "This is Item 1"
+            }
+        ],
+        "totalProducts": 3
+    }
+]

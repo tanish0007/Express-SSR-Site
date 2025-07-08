@@ -164,7 +164,8 @@ async function showSignUpForm() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    name: userName.value,
+                    id: Date.now(),
+                    username: userName.value,
                     email: userEmail.value,
                     password: userPassword.value,
                     isAdmin: isAdmin.checked

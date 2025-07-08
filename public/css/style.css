@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Titillium Web", sans-serif;
+}
+
+body {
+    background-color: #1a1a2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    transition: .3s ease;
+}
+
+.container:hover {
+    box-shadow: 0 0 30px white;
+}
+.container h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2.7rem;
+    margin-bottom: 1.5rem;
+    font-family: "Great Vibes", sans-serif;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+}
+
+
+
+/* previous css */
+.tabLabel {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 1.5rem;
+}
+
+.tabLabel input[type="radio"] {
+    display: none;
+}
+
+.tabLabel label {
+    cursor: pointer;
+    padding: 10px 20px;
+    background-color: #e0e0e0;
+    border-radius: 20px;
+    transition:0.3s ease;
+}
+
+.tabLabel input[type="radio"]:checked + label {
+    background-color: #8a2be2;
+    box-shadow: 0 0 10px blueviolet;
+    color: white;
+}
+
+/* Form content */
+form.tab {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    /* gap: 1rem;    */
+}
+
+form.tab label {
+    color: #333;
+    font-weight: bold;
+    /* margin-top: 0.5rem;   */
+}
+form.tab label:nth-child(2), form.tab label:nth-child(3){
+    margin-top: 1.2rem;
+}
+form.tab label:nth-child(4) {
+    margin-top: .5rem;
+}
+
+form.tab input[type="text"],
+form.tab input[type="email"],
+form.tab input[type="password"] {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 19px;
+    width: 100%;
+}
+
+form.tab input[type="checkbox"] {
+    margin-left: 10px;
+    transform: scale(1.2);
+}
+
+/* Buttons */
+form.tab button {
+    /* margin-top: 1rem; */
+    width: fit-content;
+    place-self: center;
+    margin-top: 10px;
+    padding: 12px 30px;
+    border: none;
+    font-size: 20px;
+    background-color: #8a2be2;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+form.tab button:hover {
+    box-shadow: 0 0 20px #8a2be2;
+}
+
+/* Error and success messages */
+#errorText {
+    font-size: 1rem;
+    margin-top: -0.5rem;
+    font-weight: 700;
+    margin-top: 10px;
+    /* text-align: center; */
+}

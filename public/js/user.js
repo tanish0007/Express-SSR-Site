@@ -298,7 +298,6 @@ function addToDom(item, container) {
     });
     btnBox.appendChild(wishlistBtn);
 
-    // Add to Cart button
     const cartBtn = document.createElement("button");
     cartBtn.className = "button button-success";
     cartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
@@ -323,5 +322,4 @@ function addToDom(item, container) {
     container.appendChild(div);
 }
 
-// Initialize the page
 document.addEventListener("DOMContentLoaded", initData);

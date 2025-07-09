@@ -1,7 +1,7 @@
 [
   {
     "id": 2,
-    "title": "Eyeshadow Palette with Mirror",
+    "title": "Eyeshadow Palette",
     "description": "The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application.",
     "category": "beauty",
     "price": 19.99,
@@ -120,67 +120,6 @@
       "https://cdn.dummyjson.com/product-images/beauty/powder-canister/1.webp"
     ],
     "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/thumbnail.webp"
-  },
-  {
-    "id": 4,
-    "title": "Red Lipstick",
-    "description": "The Red Lipstick is a classic and bold choice for adding a pop of color to your lips. With a creamy and pigmented formula, it provides a vibrant and long-lasting finish.",
-    "category": "beauty",
-    "price": 12.99,
-    "discountPercentage": 12.16,
-    "rating": 4.36,
-    "stock": 91,
-    "quantity": 91,
-    "tags": [
-      "beauty",
-      "lipstick"
-    ],
-    "brand": "Chic Cosmetics",
-    "sku": "BEA-CHI-LIP-004",
-    "weight": 1,
-    "dimensions": {
-      "width": 18.11,
-      "height": 28.38,
-      "depth": 22.17
-    },
-    "warrantyInformation": "3 year warranty",
-    "shippingInformation": "Ships in 1 week",
-    "availabilityStatus": "In Stock",
-    "reviews": [
-      {
-        "rating": 4,
-        "comment": "Great product!",
-        "date": "2025-04-30T09:41:02.053Z",
-        "reviewerName": "Liam Garcia",
-        "reviewerEmail": "liam.garcia@x.dummyjson.com"
-      },
-      {
-        "rating": 5,
-        "comment": "Great product!",
-        "date": "2025-04-30T09:41:02.053Z",
-        "reviewerName": "Ruby Andrews",
-        "reviewerEmail": "ruby.andrews@x.dummyjson.com"
-      },
-      {
-        "rating": 5,
-        "comment": "Would buy again!",
-        "date": "2025-04-30T09:41:02.053Z",
-        "reviewerName": "Clara Berry",
-        "reviewerEmail": "clara.berry@x.dummyjson.com"
-      }
-    ],
-    "returnPolicy": "7 days return policy",
-    "minimumOrderQuantity": 40,
-    "meta": {
-      "createdAt": "2025-04-30T09:41:02.053Z",
-      "updatedAt": "2025-04-30T09:41:02.053Z",
-      "barcode": "9467746727219",
-      "qrCode": "https://cdn.dummyjson.com/public/qr-code.png"
-    },
-    "images": [
-      "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/1.webp"
-    ],
-    "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/thumbnail.webp"
   },
   {
     "id": 5,

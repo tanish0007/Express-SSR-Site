@@ -6,6 +6,7 @@ const PORT = 6060;
 app.use(express.json());
 app.use(express.static("public"));
 
+// Login API
 app.post("/api/auth/login", (req, res) => {
     const {email, password} = req.body;
     if (!email || !password) {
@@ -43,6 +44,7 @@ app.post("/api/auth/login", (req, res) => {
     })
 })
 
+// Signup API
 app.post("/api/auth/signup", (req,res) => {
     console.log(req.body);
     const {id, username, email, password, isAdmin} = req.body;
@@ -106,6 +108,7 @@ const writeProducts = async (products) => {
     }
 };
 
+// Fetching all products API
 app.get('/api/products', async (req, res) => {
     try {
         const products = await readProducts();
@@ -130,6 +133,7 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
+// Create a new product API
 app.post('/api/products', async (req, res) => {
     try {
         const { title, quantity, price, description } = req.body;
@@ -181,7 +185,7 @@ app.post('/api/products', async (req, res) => {
     }
 });
 
-
+// Update an existing product .. API
 app.patch('/api/products/:id', async (req, res) => {
     try {
         const productId = parseInt(req.params.id);
@@ -232,7 +236,7 @@ app.patch('/api/products/:id', async (req, res) => {
     }
 });
 
-
+// Delete an existing product API
 app.delete('/api/products/:id', async (req, res) => {
     try {
         const productId = parseInt(req.params.id);
@@ -295,7 +299,6 @@ const readCarts = async () => {
         const data = await FS.promises.readFile('db/cart.json', 'utf8');
         return JSON.parse(data);
     } catch (error) {
-        // If file doesn't exist, return empty array
         if (error.code === 'ENOENT') return [];
         throw error;
     }
@@ -308,6 +311,7 @@ const writeCarts = async (carts) => {
     }
 };
 
+// Fetch a single User API having it's wishlist and cartItems
 app.get('/api/users/:userId', async (req, res) => {
     try {
         const userId = parseInt(req.params.userId);
@@ -321,15 +325,13 @@ app.get('/api/users/:userId', async (req, res) => {
             });
         }
 
-        // Get wishlist and cart data
         const wishlists = await readWishlists();
         const userWishlist = wishlists.find(w => w.userId === userId) || { products: [] };
+        const wishlistIds = userWishlist.products.map(p => p.id);
         
+
         const carts = await readCarts();
         const userCart = carts.find(c => c.userId === userId) || { products: [] };
-
-        // Extract just the product IDs for wishlist
-        const wishlistIds = userWishlist.products.map(p => p.id);
         
         // Prepare cart items in format expected by frontend
         const cartItems = userCart.products.map(p => ({
@@ -354,6 +356,7 @@ app.get('/api/users/:userId', async (req, res) => {
     }
 });
 
+// updating the wishlist of userId..
 app.patch('/api/users/:userId/wishlist', async (req, res) => {
     try {
         const userId = parseInt(req.params.userId);
@@ -419,7 +422,7 @@ app.patch('/api/users/:userId/wishlist', async (req, res) => {
         });
     }
 });
-
+// updating the cart of specific user
 app.patch('/api/users/:userId/cart', async (req, res) => {
     try {
         const userId = parseInt(req.params.userId);

@@ -280,7 +280,7 @@ const readUsers = async () => {
 
 const readWishlists = async () => {
     try {
-        const data = await FS.promises.readFile('db/wishlist.json', 'utf8');
+        const data = await FS.promises.readFile('db/wishlists.json', 'utf8');
         return JSON.parse(data);
     } catch (error) {
         if (error.code === 'ENOENT') return [];
@@ -289,14 +289,14 @@ const readWishlists = async () => {
 };
 const writeWishlists = async (wishlists) => {
     try {
-        await FS.promises.writeFile('db/wishlist.json', JSON.stringify(wishlists, null, 2));
+        await FS.promises.writeFile('db/wishlists.json', JSON.stringify(wishlists, null, 2));
     } catch (error) {
         throw error;
     }
 };
 const readCarts = async () => {
     try {
-        const data = await FS.promises.readFile('db/cart.json', 'utf8');
+        const data = await FS.promises.readFile('db/carts.json', 'utf8');
         return JSON.parse(data);
     } catch (error) {
         if (error.code === 'ENOENT') return [];
@@ -305,7 +305,7 @@ const readCarts = async () => {
 };
 const writeCarts = async (carts) => {
     try {
-        await FS.promises.writeFile('db/cart.json', JSON.stringify(carts, null, 2));
+        await FS.promises.writeFile('db/carts.json', JSON.stringify(carts, null, 2));
     } catch (error) {
         throw error;
     }
@@ -496,6 +496,115 @@ app.patch('/api/users/:userId/cart', async (req, res) => {
         res.status(500).json({
             success: false,
             error: "Failed to update cart"
+        });
+    }
+});
+
+
+
+// orders related APIs
+const readOrders = async () => {
+    try {
+        const data = await FS.promises.readFile('db/orders.json', 'utf8');
+        return JSON.parse(data);
+    } catch (error) {
+        if (error.code === 'ENOENT') return [];
+        throw error;
+    }
+};
+
+const writeOrders = async (orders) => {
+    try {
+        await FS.promises.writeFile('db/orders.json', JSON.stringify(orders, null, 2));
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Create a new order
+app.post('/api/users/:userId/orders', async (req, res) => {
+    try {
+        const userId = parseInt(req.params.userId);
+        const { items, total } = req.body;
+        
+        if (!Array.isArray(items) || typeof total !== 'number') {
+            return res.status(400).json({
+                success: false,
+                error: "Invalid order data"
+            });
+        }
+
+        const orders = await readOrders();
+        const newOrder = {
+            id: Date.now(),
+            userId,
+            items,
+            total,
+            date: new Date().toISOString(),
+            status: 'completed'
+        };
+
+        orders.push(newOrder);
+        await writeOrders(orders);
+
+        res.status(201).json({
+            success: true,
+            order: newOrder
+        });
+    } catch (error) {
+        console.error("Error creating order:", error);
+        res.status(500).json({
+            success: false,
+            error: "Failed to create order"
+        });
+    }
+});
+
+// Get all orders for a user
+app.get('/api/users/:userId/orders', async (req, res) => {
+    try {
+        const userId = parseInt(req.params.userId);
+        const orders = await readOrders();
+        const userOrders = orders.filter(order => order.userId === userId);
+
+        res.json({
+            success: true,
+            orders: userOrders
+        });
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+        res.status(500).json({
+            success: false,
+            error: "Failed to fetch orders"
+        });
+    }
+});
+
+// Get a specific order
+app.get('/api/users/:userId/orders/:orderId', async (req, res) => {
+    try {
+        const userId = parseInt(req.params.userId);
+        const orderId = parseInt(req.params.orderId);
+        const orders = await readOrders();
+        
+        const order = orders.find(o => o.id === orderId && o.userId === userId);
+        
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                error: "Order not found"
+            });
+        }
+
+        res.json({
+            success: true,
+            order
+        });
+    } catch (error) {
+        console.error("Error fetching order:", error);
+        res.status(500).json({
+            success: false,
+            error: "Failed to fetch order"
         });
     }
 });

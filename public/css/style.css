@@ -72,7 +72,6 @@ body {
     color: white;
 }
 
-/* Form content */
 form.tab {
     display: flex;
     flex-direction: column;
@@ -107,7 +106,6 @@ form.tab input[type="checkbox"] {
     transform: scale(1.2);
 }
 
-/* Buttons */
 form.tab button {
     /* margin-top: 1rem; */
     width: fit-content;
@@ -128,11 +126,9 @@ form.tab button:hover {
     box-shadow: 0 0 20px #8a2be2;
 }
 
-/* Error and success messages */
 #errorText {
     font-size: 1rem;
     margin-top: -0.5rem;
     font-weight: 700;
     margin-top: 10px;
-    /* text-align: center; */
 }

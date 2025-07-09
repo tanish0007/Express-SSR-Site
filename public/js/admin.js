@@ -6,9 +6,7 @@ if(!loggedInUser || !loggedInUser.isAdmin) {
     window.location.href = "index.html";
 }
 
-// Initialize UI
 function initUI() {
-    // Navigation
     const heading = document.createElement("h1");
     heading.innerHTML = `Welcome ${loggedInUser.username}`;
     nav.appendChild(heading);
@@ -186,7 +184,6 @@ async function renderItems() {
     const lowerDiv = document.createElement("div");
     lowerDiv.className = "lower-div";
     
-    // Clear existing items
     const existingLowerDiv = document.querySelector(".lower-div");
     if(existingLowerDiv) existingLowerDiv.remove();
 
@@ -264,31 +261,26 @@ function addToDom(product, container) {
         const confirmUpdate = confirm(`Are you sure you want to update "${product.title}"?`);
         if (!confirmUpdate) return;
 
-        // Pre-fill the admin input fields
         document.querySelector("#nameBox").value = product.title;
         document.querySelector("#quanBox").value = product.stock;
         document.querySelector("#priceBox").value = product.price;
         document.querySelector("#descBox").value = product.description;
 
-        // Remove existing Update Now button if any
         const existingUpdNow = document.querySelector("#updNowBtn");
         if (existingUpdNow) existingUpdNow.remove();
 
-        // Disable Add Product button
         const addBtn = document.querySelector("#addBtn");
         if (addBtn) {
             addBtn.disabled = true;
             addBtn.style.cursor = "not-allowed";
         }
 
-        // Disable Logout button
         const logoutBtn = document.querySelector("#logoutBtn") 
         if (logoutBtn) {
             logoutBtn.disabled = true;
             logoutBtn.style.cursor = "not-allowed";
         }
 
-        // disable other Delete buttons too..
         const allDelBtns = document.querySelectorAll(".deleteBtn");
         if(allDelBtns){
             allDelBtns.forEach(button => {
@@ -297,7 +289,6 @@ function addToDom(product, container) {
             })
         }
 
-        // Creating Update Now Button
         const updNow = document.createElement("button");
         updNow.id = "updNowBtn";
         updNow.className = "button button-success";
@@ -332,7 +323,6 @@ function addToDom(product, container) {
                 }
             }
 
-            // Re-enable buttons
             if (addBtn) {
                 addBtn.disabled = false;
                 addBtn.style.cursor = "pointer";
@@ -363,5 +353,4 @@ function addToDom(product, container) {
     container.appendChild(div);
 }
 
-// Initialize the page
 initUI();

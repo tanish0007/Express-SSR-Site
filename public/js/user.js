@@ -141,7 +141,6 @@ function initUI() {
     const sideNav = document.createElement("div");
     sideNav.className = "side-nav";
 
-    // Wishlist button with counter
     const wishlistBtnContainer = document.createElement("div");
     wishlistBtnContainer.className = "nav-btn-container";
     
@@ -162,7 +161,7 @@ function initUI() {
     cartBtnContainer.className = "nav-btn-container";
     
     const cartBtn = document.createElement("button");
-    cartBtn.className = `button ${showingCart ? 'active' : ''}`;
+    cartBtn.className = "button";  // Removed the showingCart check
     cartBtn.innerHTML = '<i class="fas fa-shopping-cart" style="color: blue"></i> Cart';
     cartBtn.addEventListener("click", () => {
         window.location.href = "cart.html";

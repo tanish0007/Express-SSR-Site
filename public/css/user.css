@@ -45,7 +45,6 @@ body {
   box-shadow: 0 10px 40px rgba(138, 43, 226, 0.4);
 }
 
-/* Navigation */
 .nav {
   display: flex;
   justify-content: space-between;
@@ -104,7 +103,6 @@ body {
   font-weight: bold;
 }
 
-/* Buttons */
 .button {
   padding: 0.625rem 1.25rem;
   border: none;
@@ -174,7 +172,6 @@ body {
   outline: none;
 }
 
-/* Main content */
 .content {
   padding: 20px;
 }
@@ -257,7 +254,6 @@ body {
   border: 2px dashed var(--primary-light);
 }
 
-/* Pagination */
 .pagination-controls{
   width: 100%;
   display: flex;
@@ -295,7 +291,6 @@ body {
   cursor: not-allowed;
 }
 
-/* Responsive Design */
 @media (max-width: 480px) {
   body {
     padding: 0.625rem;

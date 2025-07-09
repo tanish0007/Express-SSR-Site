@@ -12,7 +12,6 @@ if (!loggedInUser.id) {
 let items = [];
 let showingWishlist = false;
 
-// API Helper Functions
 async function fetchProducts() {
     try {
         const response = await fetch('http://localhost:6060/api/products');
@@ -75,7 +74,6 @@ async function updateUserCart(userId, cart) {
     }
 }
 
-// Initialize data
 async function initData() {
     items = await fetchProducts();
     const userData = await fetchUserData(loggedInUser.id);
@@ -87,7 +85,6 @@ async function initData() {
     initUI();
 }
 
-// Pagination functions remain the same
 function calculateTotalPages(itemsToDisplay) {
     if (itemsToDisplay.length % itemsPerPage === 0) {
         return itemsToDisplay.length / itemsPerPage;
@@ -161,7 +158,6 @@ function initUI() {
     wishlistBtnContainer.appendChild(wishlistCounter);
     sideNav.appendChild(wishlistBtnContainer);
 
-    // Cart button with counter
     const cartBtnContainer = document.createElement("div");
     cartBtnContainer.className = "nav-btn-container";
     
@@ -180,7 +176,6 @@ function initUI() {
     cartBtnContainer.appendChild(cartCounter);
     sideNav.appendChild(cartBtnContainer);
 
-    // Logout button
     const logoutBtn = document.createElement("button");
     logoutBtn.className = "button button-danger";
     logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
@@ -276,7 +271,6 @@ function addToDom(item, container) {
     const btnBox = document.createElement("div");
     btnBox.classList.add("button-box");
 
-    // Wishlist button
     const wishlistBtn = document.createElement("button");
     wishlistBtn.className = "wishlist-btn";
     wishlistBtn.innerHTML = '<i class="fas fa-heart"></i>';

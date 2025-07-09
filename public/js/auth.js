@@ -2,8 +2,6 @@ const loginTab = document.querySelector("#loginTab");
 const signUpTab = document.querySelector("#signUpTab");
 const tab = document.querySelector(".tab");
 
-// No need for localStorage users/items initialization since we're using backend now
-
 function clearForm() {
     tab.innerHTML = '';
 }
@@ -178,13 +176,11 @@ async function showSignUpForm() {
                 errorText.innerText = "Signup Successful! Redirecting to login page...";
                 errorText.style.color = "green";
                 
-                // after 2sec will redirect to login form
                 setTimeout(() => {
                     loginTab.checked = true;
                     showLoginForm();
                 }, 2000);
             } else {
-                // Handle specific error messages from the backend if available
                 errorText.innerText = data.error || "Registration failed. Please try again.";
             }
         } catch (error) {

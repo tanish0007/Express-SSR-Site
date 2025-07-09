@@ -19,5 +19,12 @@
     "email": "user4@",
     "password": "1234",
     "isAdmin": false
+  },
+  {
+    "id": 1752036507942,
+    "username": "user3",
+    "email": "user3@",
+    "password": "12345678",
+    "isAdmin": false
   }
 ]

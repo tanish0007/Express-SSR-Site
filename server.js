@@ -333,7 +333,6 @@ app.get('/api/users/:userId', async (req, res) => {
         const carts = await readCarts();
         const userCart = carts.find(c => c.userId === userId) || { products: [] };
         
-        // Prepare cart items in format expected by frontend
         const cartItems = userCart.products.map(p => ({
             id: p.id,
             quantity: p.quantity || 1
@@ -372,7 +371,6 @@ app.patch('/api/users/:userId/wishlist', async (req, res) => {
         const products = await readProducts();
         const wishlists = await readWishlists();
         
-        // Validate all product IDs exist
         for (const productId of wishlist) {
             if (!products.some(p => p.id === productId)) {
                 return res.status(400).json({
@@ -382,7 +380,6 @@ app.patch('/api/users/:userId/wishlist', async (req, res) => {
             }
         }
 
-        // Find or create user's wishlist
         let userWishlist = wishlists.find(w => w.userId === userId);
         if (!userWishlist) {
             userWishlist = {
@@ -394,7 +391,6 @@ app.patch('/api/users/:userId/wishlist', async (req, res) => {
             wishlists.push(userWishlist);
         }
 
-        // Update products in wishlist
         userWishlist.products = wishlist.map(productId => {
             const product = products.find(p => p.id === productId);
             return {

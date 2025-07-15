@@ -14,5 +14,28 @@
     "total": 29.98,
     "date": "2025-07-09T16:29:11.924Z",
     "status": "completed"
+  },
+  {
+    "id": 1752167061978,
+    "userId": 1752036507942,
+    "items": [
+      {
+        "id": 9,
+        "title": "Dolce Shine Eau de",
+        "price": 69.99,
+        "quantity": 3,
+        "total": 209.96999999999997
+      },
+      {
+        "id": 5,
+        "title": "Red Nail Polish",
+        "price": 8.99,
+        "quantity": 4,
+        "total": 35.96
+      }
+    ],
+    "total": 245.92999999999998,
+    "date": "2025-07-10T17:04:21.978Z",
+    "status": "completed"
   }
 ]

@@ -70,7 +70,7 @@ async function showLoginForm() {
             console.log(data);
 
             if (data.success) {
-                sessionStorage.setItem("loggedInUser", JSON.stringify(data.user));
+                localStorage.setItem("loggedInUser", JSON.stringify(data.user));
                 if(data.user.isAdmin) {
                     window.location.href = "admin.html";
                 } else {
@@ -199,7 +199,17 @@ signUpTab.addEventListener("change", () => {
 });
 
 window.addEventListener('DOMContentLoaded', () => {
-    if (loginTab.checked) {
-        showLoginForm();
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    
+    if (loggedInUser) {
+        if (loggedInUser.isAdmin) {
+            window.location.href = "admin.html";
+        } else {
+            window.location.href = "user.html";
+        }
+    } else {
+        if (loginTab.checked) {
+            showLoginForm();
+        }
     }
 });

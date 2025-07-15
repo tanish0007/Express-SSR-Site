@@ -1,11 +1,11 @@
 const nav = document.querySelector(".nav");
 const itemsBox = document.querySelector(".items-box");
-const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser")) || {};
+const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || {};
 
 let currentPage = 1;
 let itemsPerPage = 8;
 
-if (!loggedInUser.id) {
+if (!loggedInUser.id || loggedInUser.isAdmin) {
     window.location.href = "index.html";
 }
 
@@ -17,7 +17,13 @@ async function fetchProducts() {
         const response = await fetch('http://localhost:6060/api/products');
         const data = await response.json();
         if (data.success) {
-            return data.products;
+            // Ensure all products have quantity
+            return data.products.map(product => {
+                if (product.quantity === undefined) {
+                    return { ...product, quantity: 10 }; // Default stock
+                }
+                return product;
+            });
         } else {
             console.error('Error fetching products:', data.error);
             return [];
@@ -74,13 +80,29 @@ async function updateUserCart(userId, cart) {
     }
 }
 
+async function updateProductStock(id, newQuantity) {
+    try {
+        const response = await fetch(`http://localhost:6060/api/products/${id}/stock`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ quantity: newQuantity })
+        });
+        return await response.json();
+    } catch (error) {
+        console.error('Error updating product stock:', error);
+        return { success: false };
+    }
+}
+
 async function initData() {
     items = await fetchProducts();
     const userData = await fetchUserData(loggedInUser.id);
     if (userData) {
         loggedInUser.wishlist = userData.wishlist || [];
         loggedInUser.cart = userData.cart || [];
-        sessionStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+        localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
     }
     initUI();
 }
@@ -161,7 +183,7 @@ function initUI() {
     cartBtnContainer.className = "nav-btn-container";
     
     const cartBtn = document.createElement("button");
-    cartBtn.className = "button";  // Removed the showingCart check
+    cartBtn.className = "button";
     cartBtn.innerHTML = '<i class="fas fa-shopping-cart" style="color: blue"></i> Cart';
     cartBtn.addEventListener("click", () => {
         window.location.href = "cart.html";
@@ -179,7 +201,7 @@ function initUI() {
     logoutBtn.className = "button button-danger";
     logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
     logoutBtn.addEventListener("click", () => {
-        sessionStorage.removeItem("loggedInUser");
+        localStorage.removeItem("loggedInUser");
         window.location.href = "index.html";
     });
     sideNav.appendChild(logoutBtn);
@@ -247,6 +269,10 @@ function addToDom(item, container) {
     const div = document.createElement("div");
     div.setAttribute("id", item.id);
     div.classList.add("item");
+    
+    if (item.quantity <= 0) {
+        div.classList.add("out-of-stock");
+    }
 
     const ul = document.createElement("ul");
 
@@ -264,6 +290,11 @@ function addToDom(item, container) {
     descLi.classList.add("itemDesc");
     descLi.innerHTML = `<strong>Description:</strong> ${item.description || "No description available"}`;
     ul.appendChild(descLi);
+
+    const stockLi = document.createElement("li");
+    stockLi.classList.add("itemStock");
+    stockLi.innerHTML = `<strong>Stock:</strong> ${item.quantity || 0}`;
+    ul.appendChild(stockLi);
 
     div.appendChild(ul);
 
@@ -288,7 +319,7 @@ function addToDom(item, container) {
         
         const result = await updateUserWishlist(loggedInUser.id, loggedInUser.wishlist);
         if (result.success) {
-            sessionStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+            localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
             updateNavCounters();
             if (showingWishlist) {
                 renderItems();
@@ -300,21 +331,37 @@ function addToDom(item, container) {
     const cartBtn = document.createElement("button");
     cartBtn.className = "button button-success";
     cartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
-    cartBtn.addEventListener("click", async () => {
-        const existingItem = loggedInUser.cart.find(cartItem => cartItem.id === item.id);
-        
-        if (existingItem) {
-            existingItem.quantity += 1;
-        } else {
-            loggedInUser.cart.push({ id: item.id, quantity: 1 });
-        }
-        
-        const result = await updateUserCart(loggedInUser.id, loggedInUser.cart);
-        if (result.success) {
-            sessionStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
-            updateNavCounters();
-        }
-    });
+    
+    if (item.quantity <= 0) {
+        cartBtn.disabled = true;
+        cartBtn.classList.add("disabled");
+    } else {
+        cartBtn.addEventListener("click", async () => {
+            const existingItem = loggedInUser.cart.find(cartItem => cartItem.id === item.id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                loggedInUser.cart.push({ id: item.id, quantity: 1 });
+            }
+            
+            // Update stock
+            const newQuantity = item.quantity - 1;
+            const stockResult = await updateProductStock(item.id, newQuantity);
+            
+            if (stockResult.success) {
+                item.quantity = newQuantity;
+                const cartResult = await updateUserCart(loggedInUser.id, loggedInUser.cart);
+                
+                if (cartResult.success) {
+                    localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+                    updateNavCounters();
+                    renderItems();
+                }
+            }
+        });
+    }
+    
     btnBox.appendChild(cartBtn);
 
     div.appendChild(btnBox);

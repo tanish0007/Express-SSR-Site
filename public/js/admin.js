@@ -1,10 +1,16 @@
 const nav = document.querySelector(".nav");
 const itemsBox = document.querySelector(".items-box");
-const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
+const paginationContainer = document.querySelector(".pagination");
+const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
 if(!loggedInUser || !loggedInUser.isAdmin) {
     window.location.href = "index.html";
 }
+
+// Pagination variables
+let currentPage = 1;
+const itemsPerPage = 8;
+let allProducts = [];
 
 function initUI() {
     const heading = document.createElement("h1");
@@ -25,7 +31,7 @@ function initUI() {
     logoutBtn.id = "logoutBtn";
     logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
     logoutBtn.addEventListener("click", () => {
-        sessionStorage.removeItem("loggedInUser");
+        localStorage.removeItem("loggedInUser");
         window.location.href = "index.html";
     });
     sideNav.appendChild(logoutBtn);
@@ -34,12 +40,12 @@ function initUI() {
     renderAdminInterface();
 }
 
-// API Helper Functions
 async function fetchProducts() {
     try {
         const response = await fetch('http://localhost:6060/api/products');
         const data = await response.json();
         if (data.success) {
+            allProducts = data.products; // Store all products
             return data.products;
         } else {
             console.error('Error fetching products:', data.error);
@@ -49,6 +55,53 @@ async function fetchProducts() {
         console.error('Error fetching products:', error);
         return [];
     }
+}
+
+// Calculate total pages
+function getTotalPages() {
+    return Math.ceil(allProducts.length / itemsPerPage);
+}
+
+// Get products for current page
+function getPaginatedProducts() {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return allProducts.slice(startIndex, endIndex);
+}
+
+// Render pagination controls
+function renderPagination() {
+    paginationContainer.innerHTML = '';
+    const totalPages = getTotalPages();
+
+    if (totalPages <= 1) return;
+
+    const prevButton = document.createElement("button");
+    prevButton.innerHTML = "&laquo;";
+    prevButton.disabled = currentPage === 1;
+    prevButton.addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderItems();
+        }
+    });
+
+    const pageInfo = document.createElement("span");
+    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+
+    const nextButton = document.createElement("button");
+    nextButton.innerHTML = "&raquo;";
+    nextButton.disabled = currentPage === totalPages;
+    nextButton.addEventListener("click", () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderItems();
+        }
+    });
+
+    paginationContainer.appendChild(prevButton);
+    paginationContainer.appendChild(pageInfo);
+    paginationContainer.appendChild(nextButton);
 }
 
 async function addProduct(product) {
@@ -61,6 +114,12 @@ async function addProduct(product) {
             body: JSON.stringify(product)
         });
         const data = await response.json();
+        if (data.success) {
+            
+            allProducts = await fetchProducts();
+            currentPage = Math.ceil(allProducts.length / itemsPerPage); 
+            renderItems();
+        }
         return data;
     } catch (error) {
         console.error('Error adding product:', error);
@@ -78,6 +137,10 @@ async function updateProduct(id, updates) {
             body: JSON.stringify(updates)
         });
         const data = await response.json();
+        if (data.success) {
+            allProducts = await fetchProducts();
+            renderItems();
+        }
         return data;
     } catch (error) {
         console.error('Error updating product:', error);
@@ -91,6 +154,14 @@ async function deleteProduct(id) {
             method: 'DELETE'
         });
         const data = await response.json();
+        if (data.success) {
+            allProducts = await fetchProducts();
+
+            if (allProducts.length > 0 && (allProducts.length % itemsPerPage === 0)) {
+                currentPage = Math.min(currentPage, getTotalPages());
+            }
+            renderItems();
+        }
         return data;
     } catch (error) {
         console.error('Error deleting product:', error);
@@ -154,14 +225,13 @@ function renderAdminInterface() {
 
         const newProduct = {
             title: nameBox.value.trim(),
-            quantity: parseInt(quanBox.value),
+            stock: parseInt(quanBox.value),
             price: parseFloat(priceBox.value),
             description: descBox.value.trim()
         };
 
         const result = await addProduct(newProduct);
         if (result.success) {
-            renderItems();
             alert('Product added successfully');
             nameBox.value = '';
             quanBox.value = '';
@@ -187,17 +257,22 @@ async function renderItems() {
     const existingLowerDiv = document.querySelector(".lower-div");
     if(existingLowerDiv) existingLowerDiv.remove();
 
-    const products = await fetchProducts();
+    if (allProducts.length === 0) {
+        allProducts = await fetchProducts();
+    }
 
-    if(products.length === 0) {
+    const productsToDisplay = getPaginatedProducts();
+
+    if(productsToDisplay.length === 0) {
         lowerDiv.textContent = "No products found";
     } else {
-        products.forEach(product => {
+        productsToDisplay.forEach(product => {
             addToDom(product, lowerDiv);
         });
     }
 
     itemsBox.appendChild(lowerDiv);
+    renderPagination();
 }
 
 function addToDom(product, container) {
@@ -241,14 +316,7 @@ function addToDom(product, container) {
         if (!confirmDelete) return;
 
         const result = await deleteProduct(product.id);
-        if (result.success) {
-            div.remove();
-            // clear all inputs
-            document.querySelector("#nameBox").value = '';
-            document.querySelector("#quanBox").value = '';
-            document.querySelector("#priceBox").value = '';
-            document.querySelector("#descBox").value = '';
-        } else {
+        if (!result.success) {
             alert(`Failed to delete product: ${result.error}`);
         }
     });
@@ -262,7 +330,7 @@ function addToDom(product, container) {
         if (!confirmUpdate) return;
 
         document.querySelector("#nameBox").value = product.title;
-        document.querySelector("#quanBox").value = product.stock;
+        document.querySelector("#quanBox").value = product.quantity;
         document.querySelector("#priceBox").value = product.price;
         document.querySelector("#descBox").value = product.description;
 
@@ -308,7 +376,7 @@ function addToDom(product, container) {
 
             const updates = {};
             if (product.title !== nameInput) updates.title = nameInput;
-            if (product.stock !== stockInput) updates.stock = stockInput;
+            if (product.quantity !== stockInput) updates.quantity = stockInput;
             if (product.price !== priceInput) updates.price = priceInput;
             if (product.description !== descInput) updates.description = descInput;
 
@@ -316,9 +384,7 @@ function addToDom(product, container) {
                 alert("No changes were made");
             } else {
                 const result = await updateProduct(product.id, updates);
-                if (result.success) {
-                    renderItems();
-                } else {
+                if (!result.success) {
                     alert(`Failed to update product: ${result.error}`);
                 }
             }

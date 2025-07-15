@@ -118,7 +118,7 @@ app.get('/api/products', async (req, res) => {
             title: product.title,
             description: product.description,
             price: product.price,
-            quantity: product.quantity || product.stock
+            stock: product.stock
         }));
 
         res.json({
@@ -136,12 +136,12 @@ app.get('/api/products', async (req, res) => {
 // Create a new product API
 app.post('/api/products', async (req, res) => {
     try {
-        const { title, quantity, price, description } = req.body;
+        const { title, stock, price, description } = req.body;
         
-        if (!title || !description || isNaN(price) || isNaN(quantity)) {
+        if (!title || !description || isNaN(price) || isNaN(stock)) {
             return res.status(400).json({
                 success: false,
-                error: "Missing required fields (title, description, price, quantity)"
+                error: "Missing required fields (title, description, price, stock)"
             });
         }
 
@@ -160,8 +160,7 @@ app.post('/api/products', async (req, res) => {
             title,
             description,
             price: parseFloat(price),
-            quantity: parseInt(quantity),
-            stock: parseInt(quantity)
+            stock: parseInt(stock)
         };
 
         products.push(newProduct);
@@ -174,7 +173,7 @@ app.post('/api/products', async (req, res) => {
                 title: newProduct.title,
                 description: newProduct.description,
                 price: newProduct.price,
-                quantity: newProduct.quantity
+                stock: newProduct.stock
             }
         });
     } catch (error) {
@@ -185,13 +184,13 @@ app.post('/api/products', async (req, res) => {
     }
 });
 
-// Update an existing product .. API
+// Update an existing product API
 app.patch('/api/products/:id', async (req, res) => {
     try {
         const productId = parseInt(req.params.id);
-        const { title, description, quantity, price } = req.body;
+        const { title, description, stock, price } = req.body;
 
-        if (!title && !description && !quantity && !price) {
+        if (!title && !description && !stock && !price) {
             return res.status(400).json({
                 success: false,
                 error: "No valid update fields provided"
@@ -211,7 +210,7 @@ app.patch('/api/products/:id', async (req, res) => {
 
         if (title) products[productIndex].title = title;
         if (description) products[productIndex].description = description;
-        if (quantity) products[productIndex].quantity = parseInt(quantity);
+        if (stock) products[productIndex].stock = parseInt(stock);
         if (price) products[productIndex].price = parseFloat(price);
 
         await writeProducts(products);
@@ -223,7 +222,7 @@ app.patch('/api/products/:id', async (req, res) => {
                 title: products[productIndex].title,
                 description: products[productIndex].description,
                 price: products[productIndex].price,
-                quantity: products[productIndex].quantity
+                stock: products[productIndex].stock
             }
         });
 
@@ -268,7 +267,6 @@ app.delete('/api/products/:id', async (req, res) => {
     }
 });
 
-
 const readUsers = async () => {
     try {
         const data = await FS.promises.readFile('db/users.json', 'utf8');
@@ -287,6 +285,7 @@ const readWishlists = async () => {
         throw error;
     }
 };
+
 const writeWishlists = async (wishlists) => {
     try {
         await FS.promises.writeFile('db/wishlists.json', JSON.stringify(wishlists, null, 2));
@@ -294,6 +293,7 @@ const writeWishlists = async (wishlists) => {
         throw error;
     }
 };
+
 const readCarts = async () => {
     try {
         const data = await FS.promises.readFile('db/carts.json', 'utf8');
@@ -303,6 +303,7 @@ const readCarts = async () => {
         throw error;
     }
 };
+
 const writeCarts = async (carts) => {
     try {
         await FS.promises.writeFile('db/carts.json', JSON.stringify(carts, null, 2));
@@ -311,7 +312,7 @@ const writeCarts = async (carts) => {
     }
 };
 
-// Fetch a single User API having it's wishlist and cartItems
+// Fetch a single User API with wishlist and cartItems
 app.get('/api/users/:userId', async (req, res) => {
     try {
         const userId = parseInt(req.params.userId);
@@ -329,7 +330,6 @@ app.get('/api/users/:userId', async (req, res) => {
         const userWishlist = wishlists.find(w => w.userId === userId) || { products: [] };
         const wishlistIds = userWishlist.products.map(p => p.id);
         
-
         const carts = await readCarts();
         const userCart = carts.find(c => c.userId === userId) || { products: [] };
         
@@ -355,7 +355,7 @@ app.get('/api/users/:userId', async (req, res) => {
     }
 });
 
-// updating the wishlist of userId..
+// Update wishlist of user
 app.patch('/api/users/:userId/wishlist', async (req, res) => {
     try {
         const userId = parseInt(req.params.userId);
@@ -398,7 +398,7 @@ app.patch('/api/users/:userId/wishlist', async (req, res) => {
                 title: product.title,
                 price: product.price,
                 description: product.description,
-                stock: product.quantity
+                stock: product.stock
             };
         });
 
@@ -418,7 +418,8 @@ app.patch('/api/users/:userId/wishlist', async (req, res) => {
         });
     }
 });
-// updating the cart of specific user
+
+// Update cart of user
 app.patch('/api/users/:userId/cart', async (req, res) => {
     try {
         const userId = parseInt(req.params.userId);
@@ -434,7 +435,6 @@ app.patch('/api/users/:userId/cart', async (req, res) => {
         const products = await readProducts();
         const carts = await readCarts();
         
-        // Validate all product IDs exist and quantities are valid
         for (const item of cart) {
             if (!products.some(p => p.id === item.id)) {
                 return res.status(400).json({
@@ -448,9 +448,16 @@ app.patch('/api/users/:userId/cart', async (req, res) => {
                     error: `Invalid quantity for product ${item.id}`
                 });
             }
+            
+            const product = products.find(p => p.id === item.id);
+            if (item.quantity > product.stock) {
+                return res.status(400).json({
+                    success: false,
+                    error: `Not enough stock for product ${item.id}`
+                });
+            }
         }
 
-        // Find or create user's cart
         let userCart = carts.find(c => c.userId === userId);
         if (!userCart) {
             userCart = {
@@ -464,7 +471,6 @@ app.patch('/api/users/:userId/cart', async (req, res) => {
             carts.push(userCart);
         }
 
-        // Update products in cart
         userCart.products = cart.map(item => {
             const product = products.find(p => p.id === item.id);
             return {
@@ -472,11 +478,11 @@ app.patch('/api/users/:userId/cart', async (req, res) => {
                 title: product.title,
                 price: product.price,
                 description: product.description,
-                quantity: item.quantity
+                quantity: item.quantity,
+                stock: product.stock
             };
         });
 
-        // Calculate totals
         userCart.totalQuantity = userCart.products.reduce((sum, item) => sum + item.quantity, 0);
         userCart.totalProducts = userCart.products.length;
         userCart.totalPrice = userCart.products.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -496,9 +502,50 @@ app.patch('/api/users/:userId/cart', async (req, res) => {
     }
 });
 
+// Update product stock
+app.patch('/api/products/:id/stock', async (req, res) => {
+    try {
+        const productId = parseInt(req.params.id);
+        const { stock } = req.body;
 
+        if (typeof stock !== 'number' || stock < 0) {
+            return res.status(400).json({
+                success: false,
+                error: "Invalid stock value"
+            });
+        }
 
-// orders related APIs
+        const products = await readProducts();
+        const productIndex = products.findIndex(p => p.id === productId);
+        
+        if (productIndex === -1) {
+            return res.status(404).json({
+                success: false,
+                error: "Product not found"
+            });
+        }
+
+        products[productIndex].stock = stock;
+
+        await writeProducts(products);
+
+        res.json({
+            success: true,
+            product: {
+                id: productId,
+                stock: stock
+            }
+        });
+    } catch (error) {
+        console.error("Error updating product stock:", error);
+        res.status(500).json({
+            success: false,
+            error: "Failed to update product stock"
+        });
+    }
+});
+
+// Orders related APIs
 const readOrders = async () => {
     try {
         const data = await FS.promises.readFile('db/orders.json', 'utf8');
@@ -529,6 +576,30 @@ app.post('/api/users/:userId/orders', async (req, res) => {
                 error: "Invalid order data"
             });
         }
+
+        // Validate stock levels before creating order
+        const products = await readProducts();
+        for (const item of items) {
+            const product = products.find(p => p.id === item.id);
+            if (!product) {
+                return res.status(400).json({
+                    success: false,
+                    error: `Product ${item.id} not found`
+                });
+            }
+            if (item.quantity > product.stock) {
+                return res.status(400).json({
+                    success: false,
+                    error: `Not enough stock for product ${item.id}`
+                });
+            }
+            
+            // Update product stock
+            product.stock -= item.quantity;
+        }
+
+        // Write updated products back to file
+        await writeProducts(products);
 
         const orders = await readOrders();
         const newOrder = {
@@ -607,4 +678,4 @@ app.get('/api/users/:userId/orders/:orderId', async (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`server is running on http://localhost:${PORT}`);
-})
+});

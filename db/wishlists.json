@@ -4,13 +4,6 @@
     "userId": 1752036507942,
     "products": [
       {
-        "id": 5,
-        "title": "Red Nail Polish",
-        "price": 8.99,
-        "description": "The Red Nail Polish offers a rich and glossy red hue for vibrant and polished nails. With a quick-drying formula, it provides a salon-quality finish at home.",
-        "stock": 79
-      },
-      {
         "id": 2,
         "title": "Eyeshadow Palette",
         "price": 19.99,
@@ -25,7 +18,7 @@
         "stock": 89
       }
     ],
-    "totalProducts": 3
+    "totalProducts": 2
   },
   {
     "id": 1752076814387,

@@ -7,8 +7,7 @@
     "price": 19.99,
     "discountPercentage": 18.19,
     "rating": 2.86,
-    "stock": 34,
-    "quantity": 34,
+    "stock": 4,
     "tags": [
       "beauty",
       "eyeshadow"
@@ -58,7 +57,8 @@
     "images": [
       "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/1.webp"
     ],
-    "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp"
+    "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
+    "quantity": 4
   },
   {
     "id": 3,
@@ -68,8 +68,7 @@
     "price": 14.99,
     "discountPercentage": 9.84,
     "rating": 4.64,
-    "stock": 89,
-    "quantity": 89,
+    "stock": 87,
     "tags": [
       "beauty",
       "face powder"
@@ -119,7 +118,8 @@
     "images": [
       "https://cdn.dummyjson.com/product-images/beauty/powder-canister/1.webp"
     ],
-    "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/thumbnail.webp"
+    "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/thumbnail.webp",
+    "quantity": 87
   },
   {
     "id": 5,
@@ -129,8 +129,7 @@
     "price": 8.99,
     "discountPercentage": 11.44,
     "rating": 4.32,
-    "stock": 79,
-    "quantity": 79,
+    "stock": 72,
     "tags": [
       "beauty",
       "nail polish"
@@ -180,7 +179,8 @@
     "images": [
       "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/1.webp"
     ],
-    "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/thumbnail.webp"
+    "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/thumbnail.webp",
+    "quantity": 72
   },
   {
     "id": 6,
@@ -191,7 +191,6 @@
     "discountPercentage": 1.89,
     "rating": 4.37,
     "stock": 29,
-    "quantity": 29,
     "tags": [
       "fragrances",
       "perfumes"
@@ -254,7 +253,6 @@
     "discountPercentage": 16.51,
     "rating": 4.26,
     "stock": 58,
-    "quantity": 58,
     "tags": [
       "fragrances",
       "perfumes"
@@ -317,7 +315,6 @@
     "discountPercentage": 14.72,
     "rating": 3.8,
     "stock": 98,
-    "quantity": 98,
     "tags": [
       "fragrances",
       "perfumes"
@@ -379,8 +376,7 @@
     "price": 69.99,
     "discountPercentage": 0.62,
     "rating": 3.96,
-    "stock": 4,
-    "quantity": 4,
+    "stock": 0,
     "tags": [
       "fragrances",
       "perfumes"
@@ -443,7 +439,6 @@
     "discountPercentage": 14.39,
     "rating": 2.74,
     "stock": 91,
-    "quantity": 91,
     "tags": [
       "fragrances",
       "perfumes"
@@ -506,7 +501,6 @@
     "discountPercentage": 8.57,
     "rating": 4.77,
     "stock": 85,
-    "quantity": 88,
     "tags": [
       "furniture",
       "beds"
@@ -569,7 +563,6 @@
     "discountPercentage": 14.4,
     "rating": 3.92,
     "stock": 60,
-    "quantity": 60,
     "tags": [
       "furniture",
       "sofas"
@@ -632,7 +625,6 @@
     "discountPercentage": 19.09,
     "rating": 2.87,
     "stock": 64,
-    "quantity": 64,
     "tags": [
       "furniture",
       "bedside tables"
@@ -695,7 +687,6 @@
     "discountPercentage": 2.01,
     "rating": 4.88,
     "stock": 26,
-    "quantity": 26,
     "tags": [
       "furniture",
       "office chairs"
@@ -758,7 +749,6 @@
     "discountPercentage": 8.8,
     "rating": 3.59,
     "stock": 7,
-    "quantity": 7,
     "tags": [
       "furniture",
       "bathroom"
@@ -821,7 +811,6 @@
     "discountPercentage": 12.62,
     "rating": 4.19,
     "stock": 8,
-    "quantity": 8,
     "tags": [
       "fruits"
     ],
@@ -880,7 +869,6 @@
     "discountPercentage": 9.61,
     "rating": 4.47,
     "stock": 86,
-    "quantity": 86,
     "tags": [
       "meat"
     ],
@@ -939,7 +927,6 @@
     "discountPercentage": 9.58,
     "rating": 3.13,
     "stock": 46,
-    "quantity": 46,
     "tags": [
       "pet supplies",
       "cat food"
@@ -999,7 +986,6 @@
     "discountPercentage": 13.7,
     "rating": 3.19,
     "stock": 97,
-    "quantity": 97,
     "tags": [
       "meat"
     ],
@@ -1059,7 +1045,6 @@
     "discountPercentage": 9.33,
     "rating": 4.8,
     "stock": 10,
-    "quantity": 10,
     "tags": [
       "cooking essentials"
     ],
@@ -1118,7 +1103,6 @@
     "discountPercentage": 0.16,
     "rating": 4.07,
     "stock": 84,
-    "quantity": 84,
     "tags": [
       "vegetables"
     ],
@@ -1177,7 +1161,6 @@
     "discountPercentage": 10.27,
     "rating": 4.55,
     "stock": 71,
-    "quantity": 71,
     "tags": [
       "pet supplies",
       "dog food"
@@ -1237,7 +1220,6 @@
     "discountPercentage": 11.05,
     "rating": 2.53,
     "stock": 9,
-    "quantity": 9,
     "tags": [
       "dairy"
     ],
@@ -1296,7 +1278,6 @@
     "discountPercentage": 4.23,
     "rating": 3.78,
     "stock": 74,
-    "quantity": 74,
     "tags": [
       "seafood"
     ],
@@ -1355,7 +1336,6 @@
     "discountPercentage": 0.16,
     "rating": 3.25,
     "stock": 33,
-    "quantity": 33,
     "tags": [
       "vegetables"
     ],
@@ -1414,7 +1394,6 @@
     "discountPercentage": 1,
     "rating": 3.66,
     "stock": 3,
-    "quantity": 3,
     "tags": [
       "vegetables"
     ],
@@ -1473,7 +1452,6 @@
     "discountPercentage": 14.4,
     "rating": 3.97,
     "stock": 34,
-    "quantity": 34,
     "tags": [
       "condiments"
     ],
@@ -1532,7 +1510,6 @@
     "discountPercentage": 8.69,
     "rating": 3.39,
     "stock": 27,
-    "quantity": 27,
     "tags": [
       "desserts"
     ],
@@ -1593,7 +1570,6 @@
     "price": 3.99,
     "discountPercentage": 12.06,
     "rating": 3.94,
-    "quantity": 50,
     "stock": 50,
     "tags": [
       "beverages"
@@ -1653,7 +1629,6 @@
     "discountPercentage": 15.22,
     "rating": 4.93,
     "stock": 99,
-    "quantity": 99,
     "tags": [
       "fruits"
     ],
@@ -1708,7 +1683,6 @@
     "title": "Item 1",
     "description": "This is Item 1",
     "price": 99,
-    "quantity": 23,
     "stock": 23
   }
 ]

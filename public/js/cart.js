@@ -1,5 +1,5 @@
 const cartContainer = document.querySelector('.cart-container');
-const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser")) || {};
+const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || {};
 
 if (!loggedInUser.id) {
     window.location.href = "index.html";
@@ -27,7 +27,7 @@ const logoutBtn = document.createElement('button');
 logoutBtn.className = 'button button-danger';
 logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
 logoutBtn.addEventListener('click', () => {
-    sessionStorage.removeItem("loggedInUser");
+    localStorage.removeItem("loggedInUser");
     window.location.href = "index.html";
 });
 navButtons.appendChild(logoutBtn);
@@ -328,7 +328,7 @@ async function updateQuantity(productId, change) {
 
     const result = await updateUserCart(loggedInUser.id, loggedInUser.cart);
     if (result.success) {
-        sessionStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+        localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
         renderCart();
     }
 }
@@ -338,7 +338,7 @@ async function removeItem(productId) {
     
     const result = await updateUserCart(loggedInUser.id, loggedInUser.cart);
     if (result.success) {
-        sessionStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+        localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
         renderCart();
     }
 }
@@ -397,7 +397,7 @@ async function placeOrder() {
             alert('Order placed successfully!');
             
             loggedInUser.cart = [];
-            sessionStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+            localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
             
             await updateUserCart(loggedInUser.id, []);
             
@@ -459,7 +459,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const userData = await fetchUserData(loggedInUser.id);
     if (userData) {
         loggedInUser.cart = userData.cart || [];
-        sessionStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+        localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
     }
     renderCart();
 });
